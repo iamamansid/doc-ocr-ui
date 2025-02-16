@@ -5,4 +5,7 @@ import react from '@vitejs/plugin-react-swc';
 export default defineConfig({
   base: '/doc-ocr-ui/', // Add this line
   plugins: [react()],
+  build: {
+      outDir: "dist",
+    },
 });
