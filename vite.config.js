@@ -6,6 +6,6 @@ export default defineConfig({
   base: '/doc-ocr-ui/', // Add this line
   plugins: [react()],
   build: {
-      outDir: "/dist",
+      outDir: "dist",
     },
 });
