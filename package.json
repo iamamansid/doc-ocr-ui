@@ -2,7 +2,7 @@
   "name": "doc-ocr-ui",
   "private": true,
   "version": "0.0.0",
-  "homepage": "https://iamamansid.github.io/doc-ocr-ui",
+  "homepage": "https://iamamansid.github.io/doc-ocr-ui/",
   "type": "module",
   "scripts": {
     "predeploy": "npm run build",
