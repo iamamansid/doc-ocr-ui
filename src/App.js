@@ -14,18 +14,35 @@ function App() {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
 
+  const MAX_FILE_SIZE = 5 * 1024 * 1024;
   const handleFileChange = (e) => {
     const selectedFile = e.target.files[0];
-    if (selectedFile && (selectedFile.type === 'image/jpeg' || selectedFile.type === 'application/pdf')) {
-      setFile(selectedFile);
-      setFileName(selectedFile.name);
-      setError(null);
-      setOcrResult(null); // Clear previous OCR results
-    } else {
-      setFile(null);
-      setFileName('');
-      setError('Please upload a valid JPG or PDF file.');
-    }
+
+        if (!selectedFile) {
+          setFile(null);
+          setFileName('');
+          setError('No file selected.');
+          return;
+        }
+
+        if (!(selectedFile.type === 'image/jpeg' || selectedFile.type === 'application/pdf')) {
+          setFile(null);
+          setFileName('');
+          setError('Please upload a valid JPG or PDF file.');
+          return;
+        }
+
+        if (selectedFile.size > MAX_FILE_SIZE) {
+          setFile(null);
+          setFileName('');
+          setError('File size exceeds 5MB. Please upload a smaller file.');
+          return;
+        }
+
+        setFile(selectedFile);
+        setFileName(selectedFile.name);
+        setError(null);
+        setOcrResult(null);
   };
 
   const convertPdfToJpg = async (pdfFile) => {
