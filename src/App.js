@@ -85,7 +85,7 @@ function App() {
       formData.append('document', fileToUpload);
 
       const response = await axios.post(
-        'https://spring-ai-backend-production.up.railway.app/api/webapp/v0/getDocScanned',
+        'https://spring-ai-backend-production-0a75.up.railway.app/api/webapp/v0/getDocScanned',
         formData,
         {
           headers: { 'Content-Type': 'multipart/form-data' },
