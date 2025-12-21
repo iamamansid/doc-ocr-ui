@@ -12,7 +12,7 @@ body {
 
 /* Main Container */
 .container {
-    max-width: 900px; /* Increased width for large screens */
+    max-width: 900px;
     width: 90%;
     margin: auto;
     padding: 30px;
@@ -43,6 +43,23 @@ body {
     border-radius: 12px 12px 0 0;
 }
 
+/* Cold Start Banner */
+.cold-start-banner {
+    position: relative;
+    font-size: 0.95rem;
+    margin-bottom: 20px;
+}
+
+.cold-start-banner .close {
+    position: absolute;
+    right: 12px;
+    top: 8px;
+    background: none;
+    border: none;
+    font-size: 1.3rem;
+    cursor: pointer;
+}
+
 /* Form Styles */
 .form-group {
     width: 100%;
@@ -59,7 +76,6 @@ label[for="document"] {
     padding: 15px;
     border: 2px dashed #007bff;
     border-radius: 10px;
-    text-align: center;
     cursor: pointer;
     font-weight: bold;
     color: #007bff;
@@ -72,15 +88,14 @@ label[for="document"]:hover {
     color: white;
 }
 
-/* Selected File Name */
+/* Selected File */
 .file-info {
     font-size: 1rem;
     font-style: italic;
-    text-align: center;
     margin-top: 10px;
 }
 
-/* Button Styles */
+/* Button */
 .btn-primary {
     display: block;
     width: 100%;
@@ -103,7 +118,7 @@ label[for="document"]:hover {
     margin-right: 8px;
 }
 
-/* OCR Result Styles */
+/* OCR Results */
 .ocr-results {
     margin-top: 25px;
 }
@@ -115,7 +130,7 @@ label[for="document"]:hover {
     margin-bottom: 15px;
 }
 
-/* Card for Results */
+/* OCR Cards */
 .ocr-card {
     border-radius: 10px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
@@ -124,7 +139,7 @@ label[for="document"]:hover {
     margin-top: 15px;
 }
 
-/* OCR Text Styling */
+/* OCR Text */
 .ocr-text {
     font-family: monospace;
     background: #ffffff;
@@ -134,35 +149,21 @@ label[for="document"]:hover {
     font-size: 1rem;
 }
 
-/* Responsive Design */
-@media (max-width: 1024px) {
-    .container {
-        max-width: 80%;
-    }
-}
-
+/* Responsive */
 @media (max-width: 768px) {
     .container {
-        max-width: 95%;
         padding: 20px;
     }
 
     .card-header {
         font-size: 1.5rem;
-        padding: 15px;
     }
 
     label[for="document"] {
         font-size: 1rem;
-        padding: 12px;
     }
 
     .btn-primary {
         font-size: 1rem;
-        padding: 12px;
-    }
-
-    .ocr-results h2 {
-        font-size: 1.4rem;
     }
 }

@@ -5,7 +5,8 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 
 // Ensure PDF.js worker is loaded correctly
-GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js`;
+GlobalWorkerOptions.workerSrc =
+  'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
 
 function App() {
   const [file, setFile] = useState(null);
@@ -13,36 +14,43 @@ function App() {
   const [ocrResult, setOcrResult] = useState(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [showColdStartBanner, setShowColdStartBanner] = useState(true);
 
   const MAX_FILE_SIZE = 5 * 1024 * 1024;
+
   const handleFileChange = (e) => {
     const selectedFile = e.target.files[0];
 
-        if (!selectedFile) {
-          setFile(null);
-          setFileName('');
-          setError('No file selected.');
-          return;
-        }
+    if (!selectedFile) {
+      setFile(null);
+      setFileName('');
+      setError('No file selected.');
+      return;
+    }
 
-        if (!(selectedFile.type === 'image/jpeg' || selectedFile.type === 'application/pdf')) {
-          setFile(null);
-          setFileName('');
-          setError('Please upload a valid JPG or PDF file.');
-          return;
-        }
+    if (
+      !(
+        selectedFile.type === 'image/jpeg' ||
+        selectedFile.type === 'application/pdf'
+      )
+    ) {
+      setFile(null);
+      setFileName('');
+      setError('Please upload a valid JPG or PDF file.');
+      return;
+    }
 
-        if (selectedFile.size > MAX_FILE_SIZE) {
-          setFile(null);
-          setFileName('');
-          setError('File size exceeds 5MB. Please upload a smaller file.');
-          return;
-        }
+    if (selectedFile.size > MAX_FILE_SIZE) {
+      setFile(null);
+      setFileName('');
+      setError('File size exceeds 5MB. Please upload a smaller file.');
+      return;
+    }
 
-        setFile(selectedFile);
-        setFileName(selectedFile.name);
-        setError(null);
-        setOcrResult(null);
+    setFile(selectedFile);
+    setFileName(selectedFile.name);
+    setError(null);
+    setOcrResult(null);
   };
 
   const convertPdfToJpg = async (pdfFile) => {
@@ -50,22 +58,28 @@ function App() {
     const pdf = await getDocument({ data: arrayBuffer }).promise;
     const page = await pdf.getPage(1);
     const viewport = page.getViewport({ scale: 1.5 });
+
     const canvas = document.createElement('canvas');
     const context = canvas.getContext('2d');
     canvas.height = viewport.height;
     canvas.width = viewport.width;
 
-    await page.render({ canvasContext: context, viewport: viewport }).promise;
+    await page.render({ canvasContext: context, viewport }).promise;
 
     return new Promise((resolve) => {
-      canvas.toBlob((blob) => {
-        resolve(new File([blob], 'converted.jpg', { type: 'image/jpeg' }));
-      }, 'image/jpeg', 0.9);
+      canvas.toBlob(
+        (blob) => {
+          resolve(new File([blob], 'converted.jpg', { type: 'image/jpeg' }));
+        },
+        'image/jpeg',
+        0.9
+      );
     });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     if (!file) {
       setError('Please select a file to upload.');
       return;
@@ -77,6 +91,7 @@ function App() {
 
     try {
       let fileToUpload = file;
+
       if (file.type === 'application/pdf') {
         fileToUpload = await convertPdfToJpg(file);
       }
@@ -87,18 +102,19 @@ function App() {
       const response = await axios.post(
         'https://spring-ai-backend-production-0a75.up.railway.app/api/webapp/v0/getDocScanned',
         formData,
-        {
-          headers: { 'Content-Type': 'multipart/form-data' },
-        }
+        { headers: { 'Content-Type': 'multipart/form-data' } }
       );
 
       if (response.data.result) {
         setOcrResult(response.data.response);
+        setShowColdStartBanner(false);
       } else {
-        setError('Failed to process the document.');
+        setError('Failed to process the document. Please retry once.');
       }
     } catch (err) {
-      setError('An error occurred while processing the document.');
+      setError(
+        'The request failed. This may occur during the first attempt due to server cold start. Please retry once.'
+      );
       console.error(err);
     } finally {
       setLoading(false);
@@ -106,30 +122,47 @@ function App() {
   };
 
   return (
-    <div className="container mt-5">
-      <div className="card shadow custom-width">
-        <div className="card-header bg-primary text-white text-center">
-          <h1 className="mb-0">Document OCR Scanner</h1>
+    <div className="container">
+      <div className="card shadow">
+        <div className="card-header">
+          Document OCR Scanner
         </div>
+
         <div className="card-body">
+
+          {showColdStartBanner && (
+            <div className="alert alert-info cold-start-banner">
+              <strong>Note:</strong> The first API request may take longer or fail
+              due to server cold start. If that happens, please retry once.
+              <button
+                className="close"
+                onClick={() => setShowColdStartBanner(false)}
+              >
+                &times;
+              </button>
+            </div>
+          )}
+
           <form onSubmit={handleSubmit}>
             <div className="form-group">
-              <label htmlFor="document" className="font-weight-bold">
-                Upload Document (JPG or PDF):
-              </label>
+              <label htmlFor="document">Upload Document (JPG or PDF)</label>
               <input
                 type="file"
-                className="form-control-file"
                 id="document"
                 onChange={handleFileChange}
                 accept=".jpg,.jpeg,.pdf"
               />
-              {fileName && <p className="mt-2 font-italic">Selected: {fileName}</p>}
+              {fileName && <div className="file-info">Selected: {fileName}</div>}
             </div>
-            <button type="submit" className="btn btn-primary btn-block" disabled={loading || !file}>
+
+            <button
+              type="submit"
+              className="btn btn-primary"
+              disabled={loading || !file}
+            >
               {loading ? (
                 <>
-                  <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>{' '}
+                  <span className="spinner-border spinner-border-sm"></span>
                   Processing...
                 </>
               ) : (
@@ -138,34 +171,29 @@ function App() {
             </button>
           </form>
 
-          {error && <div className="alert alert-danger mt-4"><strong>Error:</strong> {error}</div>}
+          {error && (
+            <div className="alert alert-danger mt-4">
+              <strong>Error:</strong> {error}
+            </div>
+          )}
 
           {ocrResult && (
-            <div className="mt-4">
-              <h2 className="text-center mb-4">OCR Results</h2>
-              <div className="card">
-                <div className="card-header bg-secondary text-white">
-                  <h5 className="card-title mb-0">Caption</h5>
-                </div>
-                <div className="card-body">
-                  <p className="card-text">{ocrResult.captionResult}</p>
-                </div>
+            <div className="ocr-results">
+              <h2>OCR Results</h2>
+
+              <div className="ocr-card">
+                <strong>Caption</strong>
+                <p>{ocrResult.captionResult}</p>
               </div>
-              <div className="card mt-3">
-                <div className="card-header bg-secondary text-white">
-                  <h5 className="card-title mb-0">Confidence</h5>
-                </div>
-                <div className="card-body">
-                  <p className="card-text">{ocrResult.confidence}</p>
-                </div>
+
+              <div className="ocr-card">
+                <strong>Confidence</strong>
+                <p>{ocrResult.confidence}</p>
               </div>
-              <div className="card mt-3">
-                <div className="card-header bg-secondary text-white">
-                  <h5 className="card-title mb-0">Extracted Text</h5>
-                </div>
-                <div className="card-body">
-                  <pre className="card-text ocr-text">{ocrResult.readResult}</pre>
-                </div>
+
+              <div className="ocr-card">
+                <strong>Extracted Text</strong>
+                <pre className="ocr-text">{ocrResult.readResult}</pre>
               </div>
             </div>
           )}
