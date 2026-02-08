@@ -3,6 +3,7 @@ import axios from 'axios';
 import { GlobalWorkerOptions, getDocument } from 'pdfjs-dist/webpack';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
+import Chatbot from './components/Chatbot';
 
 // Ensure PDF.js worker is loaded correctly
 GlobalWorkerOptions.workerSrc =
@@ -197,6 +198,8 @@ function App() {
               </div>
             </div>
           )}
+          
+          <Chatbot />
         </div>
       </div>
     </div>
