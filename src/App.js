@@ -198,10 +198,9 @@ function App() {
               </div>
             </div>
           )}
-          
-          <Chatbot />
         </div>
       </div>
+      <Chatbot />
     </div>
   );
 }
