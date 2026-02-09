@@ -204,6 +204,8 @@ label[for="document"]:hover {
     transform: none !important;
     box-shadow: 0 6px 14px rgba(0,0,0,0.15) !important;
     background: linear-gradient(135deg, #007bff, #0056b3) !important;
+    border-color: transparent !important;
+    outline: none !important;
 }
 
 .chatbot-panel {
