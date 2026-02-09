@@ -4,6 +4,7 @@ import { GlobalWorkerOptions, getDocument } from 'pdfjs-dist/webpack';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 import Chatbot from './components/Chatbot';
+import Footer from './components/Footer';
 
 // Ensure PDF.js worker is loaded correctly
 GlobalWorkerOptions.workerSrc =
@@ -201,6 +202,7 @@ function App() {
         </div>
       </div>
       <Chatbot />
+      <Footer />
     </div>
   );
 }

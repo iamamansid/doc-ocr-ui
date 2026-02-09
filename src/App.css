@@ -5,6 +5,7 @@ body {
     margin: 0;
     padding: 0;
     min-height: 100vh;
+    padding-bottom: 240px;
 }
 
 /* Main Container */
@@ -171,7 +172,7 @@ label[for="document"]:hover {
 .chatbot-widget {
     position: fixed !important;
     right: 24px !important;
-    bottom: 24px !important;
+    bottom: 180px !important;
     z-index: 1050;
     font-family: inherit;
 }
@@ -294,6 +295,7 @@ label[for="document"]:hover {
     display: flex !important;
     gap: 4px;
     margin: 0 !important;
+    align-items: center !important;
 }
 
 .chatbot-input .form-control {
@@ -302,17 +304,38 @@ label[for="document"]:hover {
     border: 1px solid #ccc;
     border-radius: 4px;
     margin: 0 !important;
+    min-width: 0;
 }
 
 .chatbot-input .btn-primary {
     background: linear-gradient(135deg, #007bff, #0056b3) !important;
     border: none !important;
     color: white;
-    padding: 8px 16px !important;
-    border-radius: 4px;
+    padding: 0 !important;
+    border-radius: 50%;
     cursor: pointer;
     margin: 0 !important;
-    transition: none !important;
+    transition: all 0.3s ease !important;
+    flex-shrink: 0;
+    white-space: nowrap;
+    font-size: 1.1rem !important;
+    width: 36px !important;
+    height: 36px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    box-shadow: 0 2px 8px rgba(0, 123, 255, 0.3);
+}
+
+.chatbot-input .btn-primary:hover:not(:disabled) {
+    background: linear-gradient(135deg, #0056b3, #003d85) !important;
+    box-shadow: 0 4px 12px rgba(0, 123, 255, 0.5) !important;
+    transform: scale(1.05);
+}
+
+.chatbot-input .btn-primary:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
 }
 
 .chatbot-input .btn-primary:hover {

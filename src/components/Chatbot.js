@@ -123,7 +123,7 @@ function Chatbot() {
               disabled={loading}
             />
             <button className="btn btn-primary" onClick={handleSend} disabled={loading}>
-              Send
+              ↑
             </button>
           </div>
         </div>
