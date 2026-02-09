@@ -24,8 +24,9 @@ function Chatbot() {
 
     const userMsg = { role: 'user', content: input.trim() };
 
-    // build payload using current messages + new user message
-    const payload = { messages: [...messages, userMsg] };
+    // build payload using only user messages + new user message
+    const userMessages = messages.filter((m) => m.role === 'user');
+    const payload = { messages: [...userMessages, userMsg] };
 
     // add user message to store for immediate UI feedback
     dispatch(addMessage(userMsg));
